@@ -115,3 +115,23 @@ def test_question_points_out_of_bounds_raises_exception():
     with pytest.raises(Exception):
         Question(title='Quiz', points=101)
 
+@pytest.fixture
+def common_question():
+    question = Question(title='Qual a capital de Minas Gerais?', points=10, max_selections=1)
+    question.add_choice('São Paulo', is_correct=False)
+    question.add_choice('Belo Horizonte', is_correct=True)
+    question.add_choice('Buenos Aires', is_correct=False)
+
+    return question
+
+def test_question_correction_with_fixture(common_question):
+    correct_ids = common_question.correct_selected_choices([2])
+
+    assert correct_ids == [2]
+
+
+def test_question_incorrect_selection_with_fixture(common_question):
+    correct_ids = common_question.correct_selected_choices([1])
+
+    assert correct_ids == []
+
